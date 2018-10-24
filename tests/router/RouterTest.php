@@ -27,7 +27,7 @@ class RouterTest extends TestCase
     public function testRun()
     {
 
-        $response = $this->http->request('GET', "/");
+        $response = $this->http->request(Router::METHOD_GET, "/");
         $this->assertEquals(200, $response->getStatusCode());
 
         $content = $response->getBody();
@@ -36,7 +36,7 @@ class RouterTest extends TestCase
 
     public function testPathNotFound()
     {
-        $response = $this->http->request("get", "/gibtsnicht", ['http_errors' => false]);
+        $response = $this->http->request(Router::METHOD_GET, "/gibtsnicht", ['http_errors' => false]);
         $this->assertEquals(404, $response->getStatusCode());
 
         $content = $response->getBody();
@@ -49,7 +49,7 @@ class RouterTest extends TestCase
     public function testMethodNotAllowed()
     {
         $path = "/";
-        $method = "PUT";
+        $method = Router::METHOD_PUT;
 
         $response = $this->http->request($method, $path, ['http_errors' => false]);
         $this->assertEquals(405, $response->getStatusCode());
