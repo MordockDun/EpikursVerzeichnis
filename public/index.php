@@ -1,14 +1,22 @@
 <?php
 
-require_once "back/vendor/autoload.php";
+require_once "../vendor/autoload.php";
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+//4echo var_export($_REQUEST,true);
+//echo "<hr>";
 
+use EpikursVerzeichnis\router\Router;
 
-$logger = new Logger("testLogger");
-$logger->pushHandler(new StreamHandler("php://stdout", Logger::DEBUG));
+Router::add("/",function(){
+    echo "Welcome";
+});
 
+Router::add("/test.html", function(){
+    echo "test.html gibt eigentlich gar nicht....";
+});
 
-$logger->info("TEST info");
+Router::add('/foo/([0-9]*)/bar',function($var1){
+    echo $var1.' is a great number!';
+});
 
+Router::run();

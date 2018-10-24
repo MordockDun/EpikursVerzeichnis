@@ -6,7 +6,7 @@
  * Time: 09:56
  */
 
-namespace EpikursVerzeichnis;
+namespace EpikursVerzeichnis\router;
 
 
 class Router
