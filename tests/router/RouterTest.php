@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
+    /** @var GuzzleHttp\Client */
     private $http;
 
     public function setUp()
@@ -33,17 +34,28 @@ class RouterTest extends TestCase
         $this->assertEquals("Welcome", $content);
     }
 
-    public function test404()
+    public function testPathNotFound()
     {
         $response = $this->http->request("get", "/gibtsnicht", ['http_errors' => false]);
-
         $this->assertEquals(404, $response->getStatusCode());
+
+        $content = $response->getBody();
+
+        echo $content;
+
+        $this->assertEquals("Path '/gibtsnicht' not found",$content);
     }
 
-    public function test405()
+    public function testMethodNotAllowed()
     {
-        $response = $this->http->request("put", "/", ['http_errors' => false]);
+        $path = "/";
+        $method = "PUT";
 
+        $response = $this->http->request($method, $path, ['http_errors' => false]);
         $this->assertEquals(405, $response->getStatusCode());
+
+        $content = $response->getBody();
+        $this->assertEquals("Method ".$method." not allowed for path ".$path,$content);
     }
+
 }

@@ -2,10 +2,16 @@
 
 require_once "../vendor/autoload.php";
 
-//4echo var_export($_REQUEST,true);
-//echo "<hr>";
 
 use EpikursVerzeichnis\router\Router;
+
+Router::methodNotAllowed(function($path,$method){
+    echo "Method ".$method." not allowed for path ".$path;
+});
+Router::pathNotFound(function($path){
+    echo "Path '".$path."' not found";
+});
+
 
 Router::add("/",function(){
     echo "Welcome";
@@ -18,5 +24,6 @@ Router::add("/test.html", function(){
 Router::add('/foo/([0-9]*)/bar',function($var1){
     echo $var1.' is a great number!';
 });
+
 
 Router::run();
