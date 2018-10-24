@@ -1,6 +1,0 @@
-{
-    "require": {
-        "monolog/monolog": "^1.23",
-        "mustache/mustache": "^2.12"
-    }
-}

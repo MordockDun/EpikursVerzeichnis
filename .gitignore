@@ -1,2 +1,3 @@
-/src/back/vendor/
-/src/front/node_modules/
+.idea
+/vendor/
+/public/node_modules/
