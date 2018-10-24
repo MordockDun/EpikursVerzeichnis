@@ -15,26 +15,30 @@ class Router
     private static $pathNotFound = null;
     private static $methodNotAllowed = null;
 
-    public static function add($expression, $function, $method='get'){
-        array_push(self::$routes,[
+    public static function add($expression, $function, $method = 'get')
+    {
+        array_push(self::$routes, [
             'expression' => $expression,
             'function' => $function,
             'method' => $method
         ]);
     }
 
-    public static function pathNotFound($function){
-        self::$pathNotFound=$function;
+    public static function pathNotFound($function)
+    {
+        self::$pathNotFound = $function;
     }
 
-    public static function methodNotAllowed($function){
+    public static function methodNotAllowed($function)
+    {
         self::$methodNotAllowed = $function;
     }
 
-    public static function run($basepath = "/"){
+    public static function run($basepath = "/")
+    {
         $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
 
-        if(isset($parsedUrl['path'])){
+        if (isset($parsedUrl['path'])) {
             $path = $parsedUrl['path'];
         } else {
             $path = "/";
@@ -45,25 +49,25 @@ class Router
         $pathMatchFound = false;
         $routeMatchFound = false;
 
-        foreach(self::$routes AS $route){
-            if($basepath!='' && $basepath!="/"){
-                $route['expression'] = "(".$basepath.")".$route['expression'];
+        foreach (self::$routes AS $route) {
+            if ($basepath != '' && $basepath != "/") {
+                $route['expression'] = "(" . $basepath . ")" . $route['expression'];
             }
 
-            $route['expression'] = "^".$route['expression'];
-            $route['expression'] = $route['expression']."$";
+            $route['expression'] = "^" . $route['expression'];
+            $route['expression'] = $route['expression'] . "$";
 
-            if(preg_match("#".$route['expression']."#", $path, $matches)){
-                $pathMatchFound=true;
+            if (preg_match("#" . $route['expression'] . "#", $path, $matches)) {
+                $pathMatchFound = true;
 
-                if(strtolower($method)==strtolower($route['method'])){
+                if (strtolower($method) == strtolower($route['method'])) {
                     array_shift($matches);
 
-                    if($basepath!='' && $basepath!="/"){
+                    if ($basepath != '' && $basepath != "/") {
                         array_shift($matches);
                     }
 
-                    call_user_func_array($route['function'],$matches);
+                    call_user_func_array($route['function'], $matches);
 
                     $routeMatchFound = true;
 
@@ -72,16 +76,16 @@ class Router
             }
         }
 
-        if(!$routeMatchFound){
-            if($pathMatchFound){
+        if (!$routeMatchFound) {
+            if ($pathMatchFound) {
                 header("HTTP/1.0 405 Method not Allowed");
-                if(self::$methodNotAllowed){
-                    call_user_func_array(self::$methodNotAllowed, [$path,$method]);
+                if (self::$methodNotAllowed) {
+                    call_user_func_array(self::$methodNotAllowed, [$path, $method]);
                 }
             } else {
                 header("HTTP/1.0 404 Not Found");
-                if(self::$pathNotFound){
-                    call_user_func_array(self::$pathNotFound,[$path]);
+                if (self::$pathNotFound) {
+                    call_user_func_array(self::$pathNotFound, [$path]);
                 }
             }
         }
