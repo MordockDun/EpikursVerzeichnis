@@ -4,6 +4,8 @@
     "phpunit/phpunit": "^7.4"
   },
   "require": {
+    "php": "^7.1",
+    "ext-PDO": "^7.2",
     "monolog/monolog": "^1.23",
     "mustache/mustache": "^2.12"
   },
