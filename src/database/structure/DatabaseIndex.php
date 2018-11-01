@@ -15,11 +15,11 @@ namespace EpikursVerzeichnis\database\structure;
 class DatabaseIndex
 {
     /** @var string */
-    private $name;
+    private $name="";
     /** @var string[] */
     private $fieldList=[];
     /** @var int */
-    private $type;
+    private $type=0;
 
     const DATABASE_INDEX_TYPE_PRIMARY = 1;
     const DATABASE_INDEX_TYPE_INDEX = 2;

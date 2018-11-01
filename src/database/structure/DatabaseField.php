@@ -15,11 +15,11 @@ namespace EpikursVerzeichnis\database\structure;
 class DatabaseField
 {
     /** @var string */
-    private $name;
+    private $name="";
     /** @var int */
-    private $type;
+    private $type=0;
     /** @var int */
-    private $length;
+    private $length=0;
 
     const DATABASEFIELD_TYPE_BOOL = 1;
     const DATABASEFIELD_TYPE_INT = 2;
