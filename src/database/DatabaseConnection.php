@@ -25,6 +25,7 @@ class DatabaseConnection implements DatabaseConnectionInterface
         if(!isset(self::$database)){
             try {
                 self::$database = new \PDO("sqlite:".self::SQLITE_FILE);
+                self::$database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             } catch (\Exception $exception){
                 throw $exception;
