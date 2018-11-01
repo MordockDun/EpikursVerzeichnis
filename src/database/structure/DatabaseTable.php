@@ -12,4 +12,7 @@ namespace EpikursVerzeichnis\database\structure;
 class DatabaseTable
 {
 
+    private $name;
+    private $fieldList;
+    private $indexList;
 }
