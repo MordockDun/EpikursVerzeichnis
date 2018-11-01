@@ -24,9 +24,12 @@ class RouterTest extends TestCase
         $this->http = null;
     }
 
+    /**
+     * @covers \EpikursVerzeichnis\router\Router::run
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testRun()
     {
-
         $response = $this->http->request(Router::METHOD_GET, "/");
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -34,6 +37,10 @@ class RouterTest extends TestCase
         $this->assertEquals("Welcome", $content);
     }
 
+    /**
+     * @covers \EpikursVerzeichnis\router\Router::pathNotFound
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testPathNotFound()
     {
         $response = $this->http->request(Router::METHOD_GET, "/gibtsnicht", ['http_errors' => false]);
@@ -46,6 +53,10 @@ class RouterTest extends TestCase
         $this->assertEquals("Path '/gibtsnicht' not found",$content);
     }
 
+    /**
+     * @covers \EpikursVerzeichnis\router\Router::methodNotAllowed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testMethodNotAllowed()
     {
         $path = "/";
