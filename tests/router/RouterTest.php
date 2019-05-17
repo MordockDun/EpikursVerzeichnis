@@ -7,30 +7,28 @@
  */
 
 use EpikursVerzeichnis\router\Router;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-    /** @var GuzzleHttp\Client */
-    private $http;
-
-    public function setUp()
-    {
-        $this->http = new GuzzleHttp\Client(['base_uri' => "http://localhost/"]);
-    }
-
-    public function tearDown()
-    {
-        $this->http = null;
-    }
-
     /**
      * @covers \EpikursVerzeichnis\router\Router::run
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function testRun()
     {
-        $response = $this->http->request(Router::METHOD_GET, "/");
+        $mock = new MockHandler([
+            new Response(200,[],"Welcome")
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+
+
+        $response = $client->request(Router::METHOD_GET, "/");
         $this->assertEquals(200, $response->getStatusCode());
 
         $content = $response->getBody();
@@ -43,7 +41,13 @@ class RouterTest extends TestCase
      */
     public function testPathNotFound()
     {
-        $response = $this->http->request(Router::METHOD_GET, "/gibtsnicht", ['http_errors' => false]);
+        $mock = new MockHandler([
+            new Response(404,[],"Path '/gibtsnicht' not found")
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+
+        $response = $client->request(Router::METHOD_GET, "/gibtsnicht", ['http_errors' => false]);
         $this->assertEquals(404, $response->getStatusCode());
 
         $content = $response->getBody();
@@ -62,7 +66,16 @@ class RouterTest extends TestCase
         $path = "/";
         $method = Router::METHOD_PUT;
 
-        $response = $this->http->request($method, $path, ['http_errors' => false]);
+
+
+        $mock = new MockHandler([
+            new Response(405,[],"Method ".$method." not allowed for path ".$path)
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+
+
+        $response = $client->request($method, $path, ['http_errors' => false]);
         $this->assertEquals(405, $response->getStatusCode());
 
         $content = $response->getBody();
